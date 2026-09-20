@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Komtan - Reusable Prompt and Snippet Library for VS Code</title>
+    <meta name="description" content="Komtan is a VS Code extension for managing reusable prompts, snippets, commands, SQL queries, notes, and text templates.">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Komtan home">
+        <img src="./assets/komtan.png" alt="" width="40" height="40">
+        <span>Komtan</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://github.com/anbarli/komtan">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">VS Code Extension</p>
+          <h1>Your reusable prompt, snippet, and command library.</h1>
+          <p class="lede">
+            Store, search, copy, and insert reusable prompts, code snippets, commands,
+            SQL queries, notes, and text templates without leaving Visual Studio Code.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://marketplace.visualstudio.com/items?itemName=ganbarli.komtan">View on Marketplace</a>
+            <a class="button secondary" href="https://github.com/anbarli/komtan">View Source</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img src="./assets/komtan.png" alt="">
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Built For Reuse</p>
+          <h2>Organize the text you reach for every day.</h2>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>Content Types</h3>
+            <p>Manage prompts, code snippets, templates, terminal commands, references, and copy blocks.</p>
+          </article>
+          <article>
+            <h3>Fast Retrieval</h3>
+            <p>Search by title, category, tags, type, scope, and full content from the Command Palette or side panel.</p>
+          </article>
+          <article>
+            <h3>Editor Workflow</h3>
+            <p>Copy content to the clipboard, insert it into the active editor, or open it in a temporary document.</p>
+          </article>
+          <article>
+            <h3>Project Scope</h3>
+            <p>Keep general items global and project-specific commands or notes scoped to the current workspace.</p>
+          </article>
+          <article>
+            <h3>Templates</h3>
+            <p>Use variables such as <code>{{project}}</code>, <code>{{ticket}}</code>, and <code>{{name}}</code>.</p>
+          </article>
+          <article>
+            <h3>Local First</h3>
+            <p>Items are stored locally through VS Code state. Import and export JSON when you need backups.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="install" class="section split">
+        <div>
+          <p class="eyebrow">Install</p>
+          <h2>Try Komtan in VS Code.</h2>
+          <p>
+            Install from the Marketplace once the listing is live, or download the VSIX from the repository
+            and install it manually in VS Code.
+          </p>
+        </div>
+        <div class="command-card">
+          <p>Development checks</p>
+          <pre><code>npm install
+npm run compile
+npm test
+npm run pack</code></pre>
+        </div>
+      </section>
+
+      <section id="privacy" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Privacy</p>
+          <h2>No account is required to use your local library.</h2>
+          <p>
+            Komtan does not send your saved prompts, snippets, notes, or templates to a remote service.
+            It uses VS Code's local extension storage for global and workspace-scoped items.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Komtan</span>
+      <a href="https://github.com/anbarli/komtan/blob/main/LICENSE">MIT License</a>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,354 @@
+{
+  "name": "komtan",
+  "displayName": "Komtan",
+  "description": "Store, search, copy, and insert reusable prompts, snippets, commands, SQL, notes, and text templates inside VS Code.",
+  "version": "1.0.0",
+  "publisher": "ganbarli",
+  "license": "MIT",
+  "icon": "resources/komtan.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anbarli/komtan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anbarli/komtan/issues"
+  },
+  "homepage": "https://anbarli.github.io/komtan/",
+  "galleryBanner": {
+    "color": "#132235",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "prompt",
+    "snippet",
+    "template",
+    "clipboard",
+    "productivity",
+    "notes",
+    "sql",
+    "commands",
+    "text",
+    "reference",
+    "tags"
+  ],
+  "main": "./extension.js",
+  "scripts": {
+    "check": "node --check extension.js",
+    "compile": "node --check extension.js",
+    "test": "node --test",
+    "pack": "npx @vscode/vsce package"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "komtan.addPrompt",
+        "title": "Komtan: Create New Item",
+        "icon": "$(add)"
+      },
+      {
+        "command": "komtan.editPrompt",
+        "title": "Komtan: Edit Item",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "komtan.editCategory",
+        "title": "Komtan: Rename Category",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "komtan.deleteCategory",
+        "title": "Komtan: Delete Category",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "komtan.refresh",
+        "title": "Komtan: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "komtan.searchPrompts",
+        "title": "Komtan: Search Library",
+        "icon": "$(search)"
+      },
+      {
+        "command": "komtan.clearSearch",
+        "title": "Komtan: Clear Search",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "komtan.filterByType",
+        "title": "Komtan: Filter by Content Type",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "komtan.filterByScope",
+        "title": "Komtan: Filter by Global/Workspace Scope",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "komtan.filterByTag",
+        "title": "Komtan: Filter by Tag",
+        "icon": "$(tag)"
+      },
+      {
+        "command": "komtan.clearFilters",
+        "title": "Komtan: Clear Filters",
+        "icon": "$(filter-filled)"
+      },
+      {
+        "command": "komtan.exportLibrary",
+        "title": "Komtan: Export Library",
+        "icon": "$(export)"
+      },
+      {
+        "command": "komtan.importLibrary",
+        "title": "Komtan: Import Library",
+        "icon": "$(import)"
+      },
+      {
+        "command": "komtan.previewPrompt",
+        "title": "Komtan: Preview Item",
+        "icon": "$(preview)"
+      },
+      {
+        "command": "komtan.bulkAddTags",
+        "title": "Komtan: Bulk Add Tags",
+        "icon": "$(tag)"
+      },
+      {
+        "command": "komtan.bulkChangeCategory",
+        "title": "Komtan: Bulk Change Category",
+        "icon": "$(folder)"
+      },
+      {
+        "command": "komtan.bulkChangeScope",
+        "title": "Komtan: Bulk Change Scope",
+        "icon": "$(root-folder)"
+      },
+      {
+        "command": "komtan.bulkDelete",
+        "title": "Komtan: Bulk Delete",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "komtan.installStarterPack",
+        "title": "Komtan: Install Starter Pack",
+        "icon": "$(package)"
+      },
+      {
+        "command": "komtan.quickCopy",
+        "title": "Komtan: Quick Search and Copy",
+        "icon": "$(search)"
+      },
+      {
+        "command": "komtan.quickInsert",
+        "title": "Komtan: Quick Search and Insert",
+        "icon": "$(insert)"
+      },
+      {
+        "command": "komtan.quickCopyFavorite",
+        "title": "Komtan: Pick Favorite and Copy",
+        "icon": "$(star-full)"
+      },
+      {
+        "command": "komtan.quickRecent",
+        "title": "Komtan: Open Recent Item",
+        "icon": "$(history)"
+      },
+      {
+        "command": "komtan.copyPrompt",
+        "title": "Komtan: Copy Item",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "komtan.insertPrompt",
+        "title": "Komtan: Insert into Editor",
+        "icon": "$(insert)"
+      },
+      {
+        "command": "komtan.duplicatePrompt",
+        "title": "Komtan: Duplicate Item",
+        "icon": "$(files)"
+      },
+      {
+        "command": "komtan.toggleFavorite",
+        "title": "Komtan: Toggle Favorite",
+        "icon": "$(star)"
+      },
+      {
+        "command": "komtan.deletePrompt",
+        "title": "Komtan: Delete Item",
+        "icon": "$(trash)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "komtan",
+          "title": "Komtan",
+          "icon": "resources/komtan-activity.png"
+        }
+      ]
+    },
+    "views": {
+      "komtan": [
+        {
+          "id": "komtan.prompts",
+          "name": "Library"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "komtan.prompts",
+        "contents": "Your Komtan library is empty.\n[Create your first item](command:komtan.addPrompt)\n[Install the starter pack](command:komtan.installStarterPack)\n[Import JSON](command:komtan.importLibrary)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "komtan.editPrompt",
+          "when": "false"
+        },
+        {
+          "command": "komtan.editCategory",
+          "when": "false"
+        },
+        {
+          "command": "komtan.deleteCategory",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "komtan.addPrompt",
+          "when": "view == komtan.prompts",
+          "group": "navigation@1"
+        },
+        {
+          "command": "komtan.searchPrompts",
+          "when": "view == komtan.prompts",
+          "group": "navigation@2"
+        },
+        {
+          "command": "komtan.clearSearch",
+          "when": "view == komtan.prompts",
+          "group": "navigation@3"
+        },
+        {
+          "command": "komtan.filterByType",
+          "when": "view == komtan.prompts",
+          "group": "navigation@4"
+        },
+        {
+          "command": "komtan.filterByScope",
+          "when": "view == komtan.prompts",
+          "group": "navigation@5"
+        },
+        {
+          "command": "komtan.filterByTag",
+          "when": "view == komtan.prompts",
+          "group": "navigation@6"
+        },
+        {
+          "command": "komtan.clearFilters",
+          "when": "view == komtan.prompts",
+          "group": "navigation@7"
+        },
+        {
+          "command": "komtan.refresh",
+          "when": "view == komtan.prompts",
+          "group": "navigation@8"
+        },
+        {
+          "command": "komtan.exportLibrary",
+          "when": "view == komtan.prompts",
+          "group": "navigation@9"
+        },
+        {
+          "command": "komtan.importLibrary",
+          "when": "view == komtan.prompts",
+          "group": "navigation@10"
+        },
+        {
+          "command": "komtan.bulkAddTags",
+          "when": "view == komtan.prompts",
+          "group": "navigation@11"
+        },
+        {
+          "command": "komtan.bulkChangeCategory",
+          "when": "view == komtan.prompts",
+          "group": "navigation@12"
+        },
+        {
+          "command": "komtan.bulkChangeScope",
+          "when": "view == komtan.prompts",
+          "group": "navigation@13"
+        },
+        {
+          "command": "komtan.bulkDelete",
+          "when": "view == komtan.prompts",
+          "group": "navigation@14"
+        },
+        {
+          "command": "komtan.installStarterPack",
+          "when": "view == komtan.prompts",
+          "group": "navigation@15"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "komtan.copyPrompt",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@1"
+        },
+        {
+          "command": "komtan.insertPrompt",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@2"
+        },
+        {
+          "command": "komtan.toggleFavorite",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@3"
+        },
+        {
+          "command": "komtan.previewPrompt",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@4"
+        },
+        {
+          "command": "komtan.editPrompt",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@5"
+        },
+        {
+          "command": "komtan.duplicatePrompt",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@6"
+        },
+        {
+          "command": "komtan.deletePrompt",
+          "when": "view == komtan.prompts && (viewItem == komtanPrompt || viewItem == komtanPromptFavorite)",
+          "group": "inline@7"
+        },
+        {
+          "command": "komtan.editCategory",
+          "when": "view == komtan.prompts && viewItem == komtanCategory",
+          "group": "inline@1"
+        },
+        {
+          "command": "komtan.deleteCategory",
+          "when": "view == komtan.prompts && viewItem == komtanCategory",
+          "group": "inline@2"
+        }
+      ]
+    }
+  }
+}
