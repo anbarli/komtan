@@ -66,6 +66,26 @@ test('creates duplicate prompts with unique title and fresh id', () => {
   assert.equal(duplicate.favorite, false);
 });
 
+test('builds editable category options from current, saved, and type suggestions', () => {
+  const options = __test.buildCategoryOptions(
+    [
+      { category: 'API Request' },
+      { category: 'Coding Prompts' },
+      { category: 'api request' },
+      { category: 'Project Notes' }
+    ],
+    'prompt',
+    'Current Category'
+  );
+
+  assert(options.includes('Current Category'));
+  assert(options.includes('API Request'));
+  assert(options.includes('Coding Prompts'));
+  assert(options.includes('Project Notes'));
+  assert(options.includes('General Prompt'));
+  assert.equal(options.filter(category => category.toLocaleLowerCase('tr-TR') === 'api request').length, 1);
+});
+
 test('renders fenced code blocks in preview content', () => {
   const rendered = __test.renderPreviewContent('Before\n```js\nconsole.log("x");\n```\nAfter', 'snippet');
   assert.match(rendered, /class="code-title">js/);

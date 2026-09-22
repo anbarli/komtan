@@ -2,7 +2,7 @@
   "name": "komtan",
   "displayName": "Komtan",
   "description": "Store, search, copy, and insert reusable prompts, snippets, commands, SQL, notes, and text templates inside VS Code.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "ganbarli",
   "license": "MIT",
   "icon": "resources/komtan.png",

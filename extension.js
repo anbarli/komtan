@@ -913,7 +913,10 @@ function openPromptEditor(provider, existingPrompt) {
     { enableScripts: true }
   );
 
-  panel.webview.html = getPromptEditorHtml(existingPrompt);
+  panel.webview.html = getPromptEditorHtml(
+    existingPrompt,
+    buildCategoryOptions(provider.getPrompts(), existingPrompt?.type, existingPrompt?.category)
+  );
 
   panel.webview.onDidReceiveMessage(async message => {
     if (message.command === 'cancel') {
@@ -1251,7 +1254,27 @@ function escapeMarkdown(value) {
   return String(value).replace(/[\\`*_{}[\]()#+\-.!|>]/g, '\\$&');
 }
 
-function getPromptEditorHtml(prompt) {
+function buildCategoryOptions(prompts, selectedType, currentCategory) {
+  const typeSuggestions = CATEGORY_SUGGESTIONS[getContentType(selectedType).value] || [];
+  const savedCategories = prompts.map(prompt => prompt.category);
+  const seen = new Set();
+
+  return [currentCategory, ...savedCategories, ...typeSuggestions]
+    .map(category => String(category || '').trim())
+    .filter(Boolean)
+    .filter(category => {
+      const key = category.toLocaleLowerCase('tr-TR');
+      if (seen.has(key)) {
+        return false;
+      }
+
+      seen.add(key);
+      return true;
+    })
+    .sort((categoryA, categoryB) => categoryA.localeCompare(categoryB, 'tr'));
+}
+
+function getPromptEditorHtml(prompt, categoryOptions = []) {
   const title = escapeHtml(prompt?.title || '');
   const category = escapeHtml(prompt?.category || '');
   const tags = escapeHtml(normalizeTags(prompt?.tags).join(', '));
@@ -1263,6 +1286,7 @@ function getPromptEditorHtml(prompt) {
     return `<option value="${escapeHtml(type.value)}" ${selected}>${escapeHtml(type.label)}</option>`;
   }).join('');
   const categorySuggestionsJson = JSON.stringify(CATEGORY_SUGGESTIONS);
+  const savedCategoryOptionsJson = JSON.stringify(categoryOptions);
   const favorite = prompt?.favorite ? 'checked' : '';
 
   return `<!DOCTYPE html>
@@ -1336,6 +1360,11 @@ function getPromptEditorHtml(prompt) {
       gap: var(--gap);
     }
 
+    .category-field {
+      display: grid;
+      gap: 6px;
+    }
+
     .favorite {
       display: inline-flex;
       align-items: center;
@@ -1403,8 +1432,11 @@ function getPromptEditorHtml(prompt) {
     <div class="meta-row">
       <label>
         Category
-        <input id="category" type="text" value="${category}" placeholder="Suggestions update when you choose a type" list="category-options">
-        <datalist id="category-options"></datalist>
+        <div class="category-field">
+          <input id="category" type="text" value="${category}" placeholder="Suggestions update when you choose a type" list="category-options">
+          <select id="category-picker" aria-label="Choose category"></select>
+          <datalist id="category-options"></datalist>
+        </div>
       </label>
       <label>
         Scope
@@ -1440,16 +1472,44 @@ function getPromptEditorHtml(prompt) {
     const form = document.getElementById('prompt-form');
     const typeSelect = document.getElementById('type');
     const categoryInput = document.getElementById('category');
+    const categoryPicker = document.getElementById('category-picker');
     const categoryOptions = document.getElementById('category-options');
     const categorySuggestions = ${categorySuggestionsJson};
+    const savedCategoryOptions = ${savedCategoryOptionsJson};
+
+    function uniqueCategories(categories) {
+      const seen = new Set();
+      return categories
+        .map(category => String(category || '').trim())
+        .filter(Boolean)
+        .filter(category => {
+          const key = category.toLocaleLowerCase('tr-TR');
+          if (seen.has(key)) {
+            return false;
+          }
+
+          seen.add(key);
+          return true;
+        })
+        .sort((categoryA, categoryB) => categoryA.localeCompare(categoryB, 'tr'));
+    }
 
     function refreshCategoryOptions() {
-      const suggestions = categorySuggestions[typeSelect.value] || [];
+      const suggestions = uniqueCategories([
+        ...savedCategoryOptions,
+        ...(categorySuggestions[typeSelect.value] || [])
+      ]);
       categoryOptions.replaceChildren(...suggestions.map(category => {
         const option = document.createElement('option');
         option.value = category;
         return option;
       }));
+      categoryPicker.replaceChildren(
+        new Option('Choose a category', ''),
+        ...suggestions.map(category => new Option(category, category))
+      );
+
+      categoryPicker.value = suggestions.includes(categoryInput.value.trim()) ? categoryInput.value.trim() : '';
 
       if (!categoryInput.value && suggestions.length) {
         categoryInput.placeholder = suggestions[0];
@@ -1457,6 +1517,15 @@ function getPromptEditorHtml(prompt) {
     }
 
     typeSelect.addEventListener('change', refreshCategoryOptions);
+    categoryInput.addEventListener('input', () => {
+      const category = categoryInput.value.trim();
+      categoryPicker.value = [...categoryPicker.options].some(option => option.value === category) ? category : '';
+    });
+    categoryPicker.addEventListener('change', () => {
+      if (categoryPicker.value) {
+        categoryInput.value = categoryPicker.value;
+      }
+    });
     refreshCategoryOptions();
 
     document.getElementById('cancel').addEventListener('click', () => {
@@ -1702,6 +1771,7 @@ module.exports = {
   deactivate,
   __test: {
     applyTemplateVariables,
+    buildCategoryOptions,
     createDuplicatePrompt,
     createDuplicateTitle,
     detectSensitiveContent,
